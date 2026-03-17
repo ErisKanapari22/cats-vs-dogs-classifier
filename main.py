@@ -7,7 +7,7 @@ def main():
     train_loader, val_loader, test_loader = prepare_dataloaders()
 
     model, train_losses, val_losses, train_accs, val_accs = train_model(
-        train_loader, val_loader, epochs=5
+        train_loader, val_loader, epochs=15
     )
 
     loss_fn = get_loss_function()
