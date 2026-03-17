@@ -89,8 +89,11 @@ def train_model(train_loader, val_loader, epochs=10):
 
     best_val_acc = 0
 
+    train_losses, val_losses = [], []
+    train_accs, val_accs = [], []
+
     for epoch in range(epochs):
-        print(f"\nEpoch {epoch + 1}/{epochs}")
+        print(f"\nEpoch {epoch+1}/{epochs}")
 
         train_loss, train_acc = train_one_epoch(
             model, train_loader, loss_fn, optimizer
@@ -100,13 +103,17 @@ def train_model(train_loader, val_loader, epochs=10):
             model, val_loader, loss_fn
         )
 
+        train_losses.append(train_loss)
+        val_losses.append(val_loss)
+        train_accs.append(train_acc)
+        val_accs.append(val_acc)
+
         print(f"Train Loss: {train_loss:.4f} | Train Acc: {train_acc:.4f}")
         print(f"Val   Loss: {val_loss:.4f} | Val   Acc: {val_acc:.4f}")
 
-        # Save best model
         if val_acc > best_val_acc:
             best_val_acc = val_acc
             torch.save(model.state_dict(), MODEL_DIR / "best_model.pth")
             print("✅ Model saved!")
 
-    return model
+    return model, train_losses, val_losses, train_accs, val_accs
